@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Hero;
+use App\Models\Creature;
 use Illuminate\Http\Request;
 
-class HeroesController extends Controller
+class CreatureController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(Hero::all(), 200);
+        return response()->json(Creature::all(), 200);
     }
 
     /**
@@ -20,8 +20,8 @@ class HeroesController extends Controller
      */
     public function store(Request $request)
     {
-        $hero = Hero::create($request->all());
-        return response()->json($hero, 201);
+        $creature = Creature::create($request->all());
+        return response()->json($creature, 201);
     }
 
     /**
@@ -29,7 +29,7 @@ class HeroesController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(Hero::findOrFail($id), 200);
+        return response()->json(Creature::findOrFail($id), 200);
     }
 
     /**
@@ -37,9 +37,9 @@ class HeroesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $hero = Hero::findOrFail($id);
-        $hero->update($request->all());
-        return response()->json($hero, 200);
+        $creature = Creature::findOrFail($id);
+        $creature->update($request->all());
+        return response()->json($creature, 200);
     }
 
     /**
@@ -47,7 +47,7 @@ class HeroesController extends Controller
      */
     public function destroy(string $id)
     {
-        Hero::destroy($id);
+        Creature::destroy($id);
         return response()->json(null, 204);
     }
 }

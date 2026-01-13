@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Realms;
+use App\Models\Realm;
 
 class RealmsController extends Controller
 {
@@ -12,7 +12,7 @@ class RealmsController extends Controller
      */
     public function index()
     {
-        return response()->json(Realms::all(), 200);
+        return response()->json(Realm::all(), 200);
     }
 
     /**
@@ -20,7 +20,7 @@ class RealmsController extends Controller
      */
     public function store(Request $request)
     {
-        $realm = Realms::create($request->all());
+        $realm = Realm::create($request->all());
         return response()->json($realm, 201);
     }
 
@@ -29,7 +29,7 @@ class RealmsController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Realms::findOrFail($id), 200);
+        return response()->json(Realm::findOrFail($id), 200);
     }
 
     /**
@@ -37,7 +37,7 @@ class RealmsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $realm = Realms::findOrFail($id);
+        $realm = Realm::findOrFail($id);
         $realm->update($request->all());
         return response()->json($realm, 200);
     }
@@ -47,7 +47,7 @@ class RealmsController extends Controller
      */
     public function destroy($id)
     {
-        Realms::destroy($id);
+        Realm::destroy($id);
         return response()->json(null, 204);
     }
 }
