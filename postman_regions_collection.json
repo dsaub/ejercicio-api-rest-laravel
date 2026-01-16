@@ -744,6 +744,48 @@
                   "  pm.response.to.have.status(200);",
                   "});",
                   "",
+        },
+        {
+          "name": "List Artifact Heroes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/artifacts/{{artifact_id}}/heroes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "artifacts",
+                "{{artifact_id}}",
+                "heroes"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Heroes returned as array', function () {",
+                  "  pm.expect(data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
                   "const data = pm.response.json();",
                   "pm.collectionVariables.set('artifact_name_current', data.name);",
                   "pm.collectionVariables.set('artifact_power_current', data.power_level);",
