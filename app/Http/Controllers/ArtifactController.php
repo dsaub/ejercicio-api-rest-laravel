@@ -59,4 +59,16 @@ class ArtifactController extends Controller
         $artifact = Artifact::findOrFail($id);
         return response()->json($artifact->heroes, 200);
     }
+
+    public function gettop() {
+        $artifacts = Artifact::with('heroes')->get();
+        $newArray = [];
+        foreach ($artifacts as $artifact) {
+            if ($artifact->power_level > 90) {
+                array_push($newArray, $artifact);
+            }
+        }
+
+        return response()->json($newArray, 200);
+    }
 }
