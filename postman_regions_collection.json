@@ -171,6 +171,48 @@
               }
             }
           ]
+        },
+        {
+          "name": "List Region Creatures",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/regions/{{region_id}}/creatures",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "regions",
+                "{{region_id}}",
+                "creatures"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Creatures returned as array', function () {",
+                  "  pm.expect(data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
