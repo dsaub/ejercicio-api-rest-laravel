@@ -21,7 +21,14 @@ class ArtifactController extends Controller
     public function store(Request $request)
     {
         $artifact = Artifact::create($request->all());
-        return response()->json($artifact, 201);
+
+        // Optionally attach heroes on creation
+        $heroIds = $request->input('hero_ids', $request->input('hero_id'));
+        if ($heroIds) {
+            $artifact->heroes()->sync((array) $heroIds);
+        }
+
+        return response()->json($artifact->load('heroes'), 201);
     }
 
     /**
@@ -39,7 +46,14 @@ class ArtifactController extends Controller
     {
         $artifact = Artifact::findOrFail($id);
         $artifact->update($request->all());
-        return response()->json($artifact, 200);
+
+        // Optionally update hero assignments
+        $heroIds = $request->input('hero_ids', $request->input('hero_id'));
+        if ($heroIds !== null) {
+            $artifact->heroes()->sync((array) $heroIds);
+        }
+
+        return response()->json($artifact->load('heroes'), 200);
     }
 
     /**
