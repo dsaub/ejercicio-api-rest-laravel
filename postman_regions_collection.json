@@ -655,6 +655,53 @@
               }
             }
           ]
+        },
+        {
+          "name": "List Dangerous Creatures",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/creatures/dangerous?level=8",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "creatures",
+                "dangerous"
+              ],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "8"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Dangerous creatures returned as array', function () {",
+                  "  pm.expect(data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
