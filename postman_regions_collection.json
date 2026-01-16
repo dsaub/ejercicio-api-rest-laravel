@@ -386,6 +386,47 @@
                   "});",
                   "",
                   "const data = pm.response.json();",
+        },
+        {
+          "name": "List Alive Heroes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/heroes/alive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "heroes",
+                "alive"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Alive heroes returned as array', function () {",
+                  "  pm.expect(data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
                   "pm.collectionVariables.set('hero_name_current', data.name);",
                   "pm.collectionVariables.set('hero_alive_current', data.alive);",
                   "pm.test('Hero realm still matches stored realm', function () {",
