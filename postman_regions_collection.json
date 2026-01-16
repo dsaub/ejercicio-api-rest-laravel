@@ -219,7 +219,134 @@
                   "const data = pm.response.json();",
                   "pm.collectionVariables.set('hero_id', data.id);",
                   "pm.collectionVariables.set('hero_name_current', data.name);",
+                  "pm.collectionVariables.set('hero_alive_current', data.alive);",
                   "pm.test('Hero linked to realm', function () {",
+                  "  pm.expect(data.realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id')));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Heroes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/heroes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "heroes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Hero by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/heroes/{{hero_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "heroes",
+                "{{hero_id}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Hero id matches stored id', function () {",
+                  "  pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('hero_id')));",
+                  "});",
+                  "pm.test('Hero name matches current', function () {",
+                  "  pm.expect(data.name).to.eql(pm.collectionVariables.get('hero_name_current'));",
+                  "});",
+                  "pm.test('Hero realm matches stored realm', function () {",
+                  "  pm.expect(data.realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id')));",
+                  "});",
+                  "pm.test('Realm object is present', function () {",
+                  "  pm.expect(data).to.have.property('realm');",
+                  "});",
+                  "pm.test('Artifacts array is present', function () {",
+                  "  pm.expect(data.artifacts).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Hero",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Elandor el Firme\",\n  \"race\": \"Elf\",\n  \"rank\": \"Captain\",\n  \"realm_id\": {{realm_id}},\n  \"alive\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/heroes/{{hero_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "heroes",
+                "{{hero_id}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('hero_name_current', data.name);",
+                  "pm.collectionVariables.set('hero_alive_current', data.alive);",
+                  "pm.test('Hero realm still matches stored realm', function () {",
                   "  pm.expect(data.realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id')));",
                   "});"
                 ]
