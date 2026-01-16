@@ -8,7 +8,7 @@ class Realm extends Model
 {
     protected $fillable = ["name", "ruler", "alignment", "region_id"];
     protected $with = ["region"];
-    
+
     public function region() {
         return $this->belongsTo(Region::class);
     }
@@ -17,7 +17,7 @@ class Realm extends Model
         return $this->hasMany(Hero::class);
     }
 
-    public function artifact() {
-        return $this->hasMany(Artifact::class);
+    public function artifacts() {
+        return $this->hasMany(Artifact::class, 'origin_realm_id');
     }
 }
