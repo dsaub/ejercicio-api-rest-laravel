@@ -175,6 +175,61 @@
       ]
     },
     {
+      "name": "Heroes",
+      "item": [
+        {
+          "name": "Create Hero",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Elandor\",\n  \"race\": \"Elf\",\n  \"rank\": \"Sentinel\",\n  \"realm_id\": {{realm_id}},\n  \"alive\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/heroes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "heroes"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('hero_id', data.id);",
+                  "pm.collectionVariables.set('hero_name_current', data.name);",
+                  "pm.test('Hero linked to realm', function () {",
+                  "  pm.expect(data.realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id')));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Realms",
       "item": [
         {
@@ -372,6 +427,10 @@
     },
     {
       "key": "realm_id",
+      "value": "1"
+    },
+    {
+      "key": "hero_id",
       "value": "1"
     }
   ]
