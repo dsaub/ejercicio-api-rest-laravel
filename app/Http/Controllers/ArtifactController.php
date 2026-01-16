@@ -12,7 +12,7 @@ class ArtifactController extends Controller
      */
     public function index()
     {
-        return response()->json(Artifact::all(), 200);
+        return response()->json(Artifact::with('heroes')->get(), 200);
     }
 
     /**
@@ -29,7 +29,7 @@ class ArtifactController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(Artifact::findOrFail($id), 200);
+        return response()->json(Artifact::with('heroes')->findOrFail($id), 200);
     }
 
     /**
@@ -49,5 +49,14 @@ class ArtifactController extends Controller
     {
         Artifact::destroy($id);
         return response()->json(null, 204);
+    }
+
+    /**
+     * Display all heroes that possess an artifact.
+     */
+    public function heroes(string $id)
+    {
+        $artifact = Artifact::findOrFail($id);
+        return response()->json($artifact->heroes, 200);
     }
 }

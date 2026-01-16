@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Realm extends Model
 {
-    protected $fillable = ["name", "ruler", "alignment"];
+    protected $fillable = ["name", "ruler", "alignment", "region_id"];
     protected $with = ["region"];
     
     public function region() {
         return $this->belongsTo(Region::class);
     }
 
-    public function hero() {
+    public function heroes() {
         return $this->hasMany(Hero::class);
     }
 

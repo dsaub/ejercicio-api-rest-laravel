@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hero;
 use Illuminate\Http\Request;
+use App\Models\Artifact;
 
 class HeroesController extends Controller
 {
@@ -12,7 +13,8 @@ class HeroesController extends Controller
      */
     public function index()
     {
-        return response()->json(Hero::all(), 200);
+        // Eager load hero artifacts; relationship name must be used here.
+        return response()->json(Hero::with('artifacts')->get(), 200);
     }
 
     /**
@@ -29,7 +31,7 @@ class HeroesController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(Hero::findOrFail($id), 200);
+        return response()->json(Hero::with('artifacts')->findOrFail($id), 200);
     }
 
     /**
@@ -49,5 +51,26 @@ class HeroesController extends Controller
     {
         Hero::destroy($id);
         return response()->json(null, 204);
+    }
+
+    /**
+     * Display all artifacts of a hero.
+     */
+    public function artifacts(string $id)
+    {
+        $hero = Hero::findOrFail($id);
+        return response()->json($hero->artifacts, 200);
+    }
+
+    public function getalive() {
+        $heroes = Hero::with('artifacts')->get();
+        $newHeroes = [];
+        foreach ($heroes as $value) {
+            if ($value->alive == 1) {
+                array_push($newHeroes, $value);
+            }
+        }
+
+        return response()->json($newHeroes);
     }
 }

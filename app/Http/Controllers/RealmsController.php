@@ -29,7 +29,7 @@ class RealmsController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Realm::findOrFail($id), 200);
+        return response()->json(Realm::with('heroes')->findOrFail($id), 200);
     }
 
     /**
@@ -49,5 +49,10 @@ class RealmsController extends Controller
     {
         Realm::destroy($id);
         return response()->json(null, 204);
+    }
+
+    public function getheroes($id) {
+        $realm = Realm::with('heroes')->findOrFail($id);
+        return response()->json($realm->heroes, 200);
     }
 }

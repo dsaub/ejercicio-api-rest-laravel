@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hero extends Model
 {
-    protected $fillable = [""];
-    protected $with = ["realm", "artifact"];
+    protected $fillable = ["name", "race", "rank", "realm_id", "alive"];
+    protected $with = ["realm"];
+    protected $casts = ["alive" => "boolean"];
 
     public function realm() {
         return $this->belongsTo(Realm::class);
     }
-    public function artifact() {
+    public function artifacts() {
         return $this->belongsToMany(Artifact::class)->withTimestamps();
     }
 }

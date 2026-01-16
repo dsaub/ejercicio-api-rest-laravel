@@ -50,4 +50,17 @@ class CreatureController extends Controller
         Creature::destroy($id);
         return response()->json(null, 204);
     }
+    
+    public function getdangerous(Request $request) {
+        $dangerMeter = $request->query('level');
+        $creatures = Creature::all();
+        $newCreatureList = [];
+
+        foreach ($creatures as $creature) {
+            if ($creature->threat_level >= $dangerMeter) {
+                array_push($newCreatureList, $creature);
+            }
+        }
+        return response()->json($newCreatureList, 200);
+    }
 }

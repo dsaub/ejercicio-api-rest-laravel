@@ -12,7 +12,7 @@ class Region extends Model
         return $this->hasMany(Realm::class);
     }
 
-    public function creature() {
+    public function creatures() {
         return $this->hasMany(Creature::class);
     }
 

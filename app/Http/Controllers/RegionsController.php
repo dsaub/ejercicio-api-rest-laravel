@@ -50,4 +50,9 @@ class RegionsController extends Controller
         Region::destroy($id);
         return response()->json(null, 204);
     }
+
+    public function getcreatures($id) {
+        $region = Region::with('creatures')->findOrFail($id);
+        return response()->json($region->creatures, 200);
+    }
 }
