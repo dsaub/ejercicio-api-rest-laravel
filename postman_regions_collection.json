@@ -357,6 +357,183 @@
       ]
     },
     {
+      "name": "Creatures",
+      "item": [
+        {
+          "name": "Create Creature",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Umbrith\",\n  \"species\": \"Shadow Drake\",\n  \"threat_level\": 7,\n  \"region_id\": {{region_id}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/creatures",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "creatures"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('creature_id', data.id);",
+                  "pm.collectionVariables.set('creature_name_current', data.name);",
+                  "pm.collectionVariables.set('creature_threat_current', data.threat_level);",
+                  "pm.test('Creature linked to region', function () {",
+                  "  pm.expect(data.region_id).to.eql(parseInt(pm.collectionVariables.get('region_id')));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Creatures",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/creatures",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "creatures"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Creature by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/creatures/{{creature_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "creatures",
+                "{{creature_id}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Creature id matches stored id', function () {",
+                  "  pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('creature_id')));",
+                  "});",
+                  "pm.test('Creature name matches current', function () {",
+                  "  pm.expect(data.name).to.eql(pm.collectionVariables.get('creature_name_current'));",
+                  "});",
+                  "pm.test('Region is included and matches', function () {",
+                  "  pm.expect(data.region_id).to.eql(parseInt(pm.collectionVariables.get('region_id')));",
+                  "  pm.expect(data).to.have.property('region');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Creature",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Umbrith Ancestral\",\n  \"species\": \"Shadow Drake\",\n  \"threat_level\": 9,\n  \"region_id\": {{region_id}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/creatures/{{creature_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "creatures",
+                "{{creature_id}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('creature_name_current', data.name);",
+                  "pm.collectionVariables.set('creature_threat_current', data.threat_level);",
+                  "pm.test('Creature region still matches stored region', function () {",
+                  "  pm.expect(data.region_id).to.eql(parseInt(pm.collectionVariables.get('region_id')));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Realms",
       "item": [
         {
@@ -558,6 +735,10 @@
     },
     {
       "key": "hero_id",
+      "value": "1"
+    },
+    {
+      "key": "creature_id",
       "value": "1"
     }
   ]
