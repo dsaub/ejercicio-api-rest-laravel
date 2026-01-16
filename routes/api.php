@@ -33,3 +33,4 @@ Route::get("realms/{id}/heroes", [RealmsController::class, 'getheroes']);
 Route::get("regions/{id}/creatures", [RegionsController::class, 'getcreatures']);
 Route::get("heroes/alive", [HeroesController::class, 'getalive']);
 Route::get("creatures/dangerous", [CreatureController::class, 'getdangerous']);
+Route::get("artifacts/top", [ArtifactController::class, 'gettop']);
