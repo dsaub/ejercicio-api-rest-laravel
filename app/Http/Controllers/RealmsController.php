@@ -29,7 +29,8 @@ class RealmsController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Realm::with('heroes')->findOrFail($id), 200);
+        $realm = Realm::with(['region', 'heroes', 'artifacts'])->findOrFail($id);
+        return response()->json($realm, 200);
     }
 
     /**
