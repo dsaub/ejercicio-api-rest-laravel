@@ -534,6 +534,191 @@
       ]
     },
     {
+      "name": "Artifacts",
+      "item": [
+        {
+          "name": "Create Artifact",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Corona de Lumen\",\n  \"type\": \"relic\",\n  \"power_level\": 95,\n  \"description\": \"Corona ancestral de luz\",\n  \"origin_realm_id\": {{realm_id}},\n  \"hero_ids\": [{{hero_id}}]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/artifacts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "artifacts"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('artifact_id', data.id);",
+                  "pm.collectionVariables.set('artifact_name_current', data.name);",
+                  "pm.collectionVariables.set('artifact_power_current', data.power_level);",
+                  "pm.test('Artifact linked to realm', function () {",
+                  "  pm.expect(data.origin_realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id')));",
+                  "});",
+                  "pm.test('Artifact has heroes array', function () {",
+                  "  pm.expect(data.heroes).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Artifacts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/artifacts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "artifacts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Artifact by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/artifacts/{{artifact_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "artifacts",
+                "{{artifact_id}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Artifact id matches stored id', function () {",
+                  "  pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('artifact_id')));",
+                  "});",
+                  "pm.test('Artifact name matches current', function () {",
+                  "  pm.expect(data.name).to.eql(pm.collectionVariables.get('artifact_name_current'));",
+                  "});",
+                  "pm.test('Origin realm matches stored realm', function () {",
+                  "  pm.expect(data.origin_realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id')));",
+                  "});",
+                  "pm.test('Heroes array is present', function () {",
+                  "  pm.expect(data.heroes).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Artifact",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Corona de Lumen Restaurada\",\n  \"type\": \"relic\",\n  \"power_level\": 90,\n  \"description\": \"Corona restaurada tras la forja\",\n  \"origin_realm_id\": {{realm_id}},\n  \"hero_ids\": [{{hero_id}}]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/artifacts/{{artifact_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "artifacts",
+                "{{artifact_id}}"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('artifact_name_current', data.name);",
+                  "pm.collectionVariables.set('artifact_power_current', data.power_level);",
+                  "pm.test('Artifact realm still matches stored realm', function () {",
+                  "  pm.expect(data.origin_realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id')));",
+                  "});",
+                  "pm.test('Artifact still has heroes array', function () {",
+                  "  pm.expect(data.heroes).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Realms",
       "item": [
         {
@@ -739,6 +924,10 @@
     },
     {
       "key": "creature_id",
+      "value": "1"
+    },
+    {
+      "key": "artifact_id",
       "value": "1"
     }
   ]
