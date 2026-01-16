@@ -766,6 +766,57 @@
               }
             }
           ]
+        },
+        {
+          "name": "Detach Artifact from Hero",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artifact_id\": {{artifact_id}},\n  \"hero_id\": {{hero_id}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/artifact-hero",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "artifact-hero"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.test('Artifact id matches variable', function () {",
+                  "  pm.expect(data.artifact_id).to.eql(parseInt(pm.collectionVariables.get('artifact_id')));",
+                  "});",
+                  "pm.test('Hero id matches variable', function () {",
+                  "  pm.expect(data.hero_id).to.eql(parseInt(pm.collectionVariables.get('hero_id')));",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
