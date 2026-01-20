@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Realm;
+use Illuminate\Support\Facades\DB;
 
 class RealmsController extends Controller
 {
@@ -48,7 +49,31 @@ class RealmsController extends Controller
      */
     public function destroy($id)
     {
-        Realm::destroy($id);
+        DB::transaction(function () use ($id) {
+            $realm = Realm::find($id);
+            if (!$realm) {
+                return; // Already deleted; idempotent delete
+            }
+
+            // Delete artifacts of the realm (detach pivots first)
+            $realmArtifactIds = $realm->artifacts()->pluck('id');
+            if ($realmArtifactIds->isNotEmpty()) {
+                // Detach all pivot rows for these artifacts
+                foreach ($realm->artifacts as $artifact) {
+                    $artifact->heroes()->detach();
+                }
+                $realm->artifacts()->delete();
+            }
+
+            // Delete heroes of the realm (detach pivots first)
+            foreach ($realm->heroes as $hero) {
+                $hero->artifacts()->detach();
+                $hero->delete();
+            }
+
+            $realm->delete();
+        });
+
         return response()->json(null, 204);
     }
 

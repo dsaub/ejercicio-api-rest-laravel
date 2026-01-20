@@ -1,0 +1,493 @@
+{
+  "info": {
+    "name": "Laravel API Collection",
+    "_postman_id": "c1b3c2c4-5d1a-4a90-94d5-1d6f55e454d9",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Regions",
+      "item": [
+        {
+          "name": "Create Region",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Valle Dorado\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/regions", "host": ["{{base_url}}"], "path": ["regions"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('region_id', data.id);",
+                  "pm.collectionVariables.set('region_name_current', data.name);",
+                  "pm.test('Region id stored', function () { pm.expect(pm.collectionVariables.get('region_id')).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Regions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/regions", "host": ["{{base_url}}"], "path": ["regions"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Region by id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/regions/{{region_id}}", "host": ["{{base_url}}"], "path": ["regions", "{{region_id}}"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.test('Region id matches stored id', function () { pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('region_id'))); });",
+                  "pm.test('Region name matches current', function () { pm.expect(data.name).to.eql(pm.collectionVariables.get('region_name_current')); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Region",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Valle Dorado Actualizado\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/regions/{{region_id}}", "host": ["{{base_url}}"], "path": ["regions", "{{region_id}}"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('region_name_current', data.name);",
+                  "pm.collectionVariables.set('region_name_updated', data.name);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Region Creatures",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/regions/{{region_id}}/creatures", "host": ["{{base_url}}"], "path": ["regions", "{{region_id}}", "creatures"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.test('Creatures returned as array', function () { pm.expect(data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Heroes",
+      "item": [
+        {
+          "name": "Create Hero",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Elandor\",\n  \"race\": \"Elf\",\n  \"rank\": \"Sentinel\",\n  \"realm_id\": {{realm_id}},\n  \"alive\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/heroes", "host": ["{{base_url}}"], "path": ["heroes"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('hero_id', data.id);",
+                  "pm.collectionVariables.set('hero_name_current', data.name);",
+                  "pm.collectionVariables.set('hero_alive_current', data.alive);",
+                  "pm.test('Hero linked to realm', function () { pm.expect(data.realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id'))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Heroes",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/heroes", "host": ["{{base_url}}"], "path": ["heroes"] } },
+          "response": []
+        },
+        {
+          "name": "Get Hero by id",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/heroes/{{hero_id}}", "host": ["{{base_url}}"], "path": ["heroes", "{{hero_id}}"] } },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.test('Hero id matches stored id', function () { pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('hero_id'))); });",
+                  "pm.test('Hero name matches current', function () { pm.expect(data.name).to.eql(pm.collectionVariables.get('hero_name_current')); });",
+                  "pm.test('Hero realm matches stored realm', function () { pm.expect(data.realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id'))); });",
+                  "pm.test('Realm object is present', function () { pm.expect(data).to.have.property('realm'); });",
+                  "pm.test('Artifacts array is present', function () { pm.expect(data.artifacts).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Hero",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Elandor el Firme\",\n  \"race\": \"Elf\",\n  \"rank\": \"Captain\",\n  \"realm_id\": {{realm_id}},\n  \"alive\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/heroes/{{hero_id}}", "host": ["{{base_url}}"], "path": ["heroes", "{{hero_id}}"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('hero_name_current', data.name);",
+                  "pm.collectionVariables.set('hero_alive_current', data.alive);",
+                  "pm.test('Hero realm still matches stored realm', function () { pm.expect(data.realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id'))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Hero Artifacts",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/heroes/{{hero_id}}/artifacts", "host": ["{{base_url}}"], "path": ["heroes", "{{hero_id}}", "artifacts"] } },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.test('Artifacts returned as array', function () { pm.expect(data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Alive Heroes",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/heroes/alive", "host": ["{{base_url}}"], "path": ["heroes", "alive"] } },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.test('Alive heroes returned as array', function () { pm.expect(data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Creatures",
+      "item": [
+        {
+          "name": "Create Creature",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Umbrith\",\n  \"species\": \"Shadow Drake\",\n  \"threat_level\": 7,\n  \"region_id\": {{region_id}}\n}" },
+            "url": { "raw": "{{base_url}}/creatures", "host": ["{{base_url}}"], "path": ["creatures"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": { "type": "text/javascript", "exec": [
+                "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                "const data = pm.response.json();",
+                "pm.collectionVariables.set('creature_id', data.id);",
+                "pm.collectionVariables.set('creature_name_current', data.name);",
+                "pm.collectionVariables.set('creature_threat_current', data.threat_level);",
+                "pm.test('Creature linked to region', function () { pm.expect(data.region_id).to.eql(parseInt(pm.collectionVariables.get('region_id'))); });"
+              ] }
+            }
+          ]
+        },
+        { "name": "List Creatures", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/creatures", "host": ["{{base_url}}"], "path": ["creatures"] } }, "response": [] },
+        {
+          "name": "Get Creature by id",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/creatures/{{creature_id}}", "host": ["{{base_url}}"], "path": ["creatures", "{{creature_id}}"] } },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": { "type": "text/javascript", "exec": [
+                "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                "const data = pm.response.json();",
+                "pm.test('Creature id matches stored id', function () { pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('creature_id'))); });",
+                "pm.test('Creature name matches current', function () { pm.expect(data.name).to.eql(pm.collectionVariables.get('creature_name_current')); });",
+                "pm.test('Region is included and matches', function () { pm.expect(data.region_id).to.eql(parseInt(pm.collectionVariables.get('region_id'))); pm.expect(data).to.have.property('region'); });"
+              ] }
+            }
+          ]
+        },
+        {
+          "name": "Update Creature",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Umbrith Ancestral\",\n  \"species\": \"Shadow Drake\",\n  \"threat_level\": 9,\n  \"region_id\": {{region_id}}\n}" },
+            "url": { "raw": "{{base_url}}/creatures/{{creature_id}}", "host": ["{{base_url}}"], "path": ["creatures", "{{creature_id}}"] }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": { "type": "text/javascript", "exec": [
+                "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                "const data = pm.response.json();",
+                "pm.collectionVariables.set('creature_name_current', data.name);",
+                "pm.collectionVariables.set('creature_threat_current', data.threat_level);",
+                "pm.test('Creature region still matches stored region', function () { pm.expect(data.region_id).to.eql(parseInt(pm.collectionVariables.get('region_id'))); });"
+              ] }
+            }
+          ]
+        },
+        {
+          "name": "List Dangerous Creatures",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/creatures/dangerous?level=8", "host": ["{{base_url}}"], "path": ["creatures", "dangerous"], "query": [{ "key": "level", "value": "8" }] } },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+            "const data = pm.response.json();",
+            "pm.test('Dangerous creatures returned as array', function () { pm.expect(data).to.be.an('array'); });"
+          ] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Realms",
+      "item": [
+        {
+          "name": "Create Realm",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Bosque de Luminaria\",\n  \"ruler\": \"Reina Althea\",\n  \"alignment\": \"neutral-good\",\n  \"region_id\": {{region_id}}\n}" },
+            "url": { "raw": "{{base_url}}/realms", "host": ["{{base_url}}"], "path": ["realms"] }
+          },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+            "const data = pm.response.json();",
+            "pm.collectionVariables.set('realm_id', data.id);",
+            "pm.collectionVariables.set('realm_name_current', data.name);",
+            "pm.collectionVariables.set('realm_alignment_current', data.alignment);",
+            "pm.test('Realm id stored', function () { pm.expect(pm.collectionVariables.get('realm_id')).to.exist; });",
+            "pm.test('Realm linked to region', function () { pm.expect(data.region_id).to.eql(parseInt(pm.collectionVariables.get('region_id'))); });"
+          ] } } ]
+        },
+        { "name": "List Realms", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/realms", "host": ["{{base_url}}"], "path": ["realms"] } }, "response": [] },
+        {
+          "name": "Get Realm by id",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/realms/{{realm_id}}", "host": ["{{base_url}}"], "path": ["realms", "{{realm_id}}"] } },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+            "const data = pm.response.json();",
+            "pm.test('Realm id matches stored id', function () { pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('realm_id'))); });",
+            "pm.test('Realm name matches current', function () { pm.expect(data.name).to.eql(pm.collectionVariables.get('realm_name_current')); });",
+            "pm.test('Realm alignment matches current', function () { pm.expect(data.alignment).to.eql(pm.collectionVariables.get('realm_alignment_current')); });",
+            "pm.test('Region is included and matches', function () { pm.expect(data).to.have.property('region'); pm.expect(data.region.id).to.eql(parseInt(pm.collectionVariables.get('region_id'))); });",
+            "pm.test('Heroes array is present', function () { pm.expect(data.heroes).to.be.an('array'); });",
+            "pm.test('Artifacts array is present', function () { pm.expect(data.artifacts).to.be.an('array'); });"
+          ] } } ]
+        },
+        {
+          "name": "Update Realm",
+          "request": { "method": "PUT", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Bosque de Luminaria Renovado\",\n  \"ruler\": \"Reina Althea\",\n  \"alignment\": \"lawful-good\",\n  \"region_id\": {{region_id}}\n}" }, "url": { "raw": "{{base_url}}/realms/{{realm_id}}", "host": ["{{base_url}}"], "path": ["realms", "{{realm_id}}"] } },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+            "const data = pm.response.json();",
+            "pm.collectionVariables.set('realm_name_current', data.name);",
+            "pm.collectionVariables.set('realm_alignment_current', data.alignment);"
+          ] } } ]
+        },
+        {
+          "name": "List Realm Heroes",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/realms/{{realm_id}}/heroes", "host": ["{{base_url}}"], "path": ["realms", "{{realm_id}}", "heroes"] } },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+            "const data = pm.response.json();",
+            "pm.test('Heroes returned as array', function () { pm.expect(data).to.be.an('array'); });"
+          ] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Artifacts",
+      "item": [
+        {
+          "name": "Create Artifact",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Corona de Lumen\",\n  \"type\": \"relic\",\n  \"power_level\": 95,\n  \"description\": \"Corona ancestral de luz\",\n  \"origin_realm_id\": {{realm_id}},\n  \"hero_ids\": [{{hero_id}}]\n}" },
+            "url": { "raw": "{{base_url}}/artifacts", "host": ["{{base_url}}"], "path": ["artifacts"] }
+          },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+            "const data = pm.response.json();",
+            "pm.collectionVariables.set('artifact_id', data.id);",
+            "pm.collectionVariables.set('artifact_name_current', data.name);",
+            "pm.collectionVariables.set('artifact_power_current', data.power_level);",
+            "pm.test('Artifact linked to realm', function () { pm.expect(data.origin_realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id'))); });",
+            "pm.test('Artifact has heroes array', function () { pm.expect(data.heroes).to.be.an('array'); });"
+          ] } } ]
+        },
+        { "name": "List Artifacts", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/artifacts", "host": ["{{base_url}}"], "path": ["artifacts"] } }, "response": [] },
+        {
+          "name": "Get Artifact by id",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/artifacts/{{artifact_id}}", "host": ["{{base_url}}"], "path": ["artifacts", "{{artifact_id}}"] } },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+            "const data = pm.response.json();",
+            "pm.test('Artifact id matches stored id', function () { pm.expect(data.id).to.eql(parseInt(pm.collectionVariables.get('artifact_id'))); });",
+            "pm.test('Artifact name matches current', function () { pm.expect(data.name).to.eql(pm.collectionVariables.get('artifact_name_current')); });",
+            "pm.test('Origin realm matches stored realm', function () { pm.expect(data.origin_realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id'))); });",
+            "pm.test('Heroes array is present', function () { pm.expect(data.heroes).to.be.an('array'); });"
+          ] } } ]
+        },
+        {
+          "name": "Update Artifact",
+          "request": { "method": "PUT", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Corona de Lumen Restaurada\",\n  \"type\": \"relic\",\n  \"power_level\": 90,\n  \"description\": \"Corona restaurada tras la forja\",\n  \"origin_realm_id\": {{realm_id}},\n  \"hero_ids\": [{{hero_id}}]\n}" }, "url": { "raw": "{{base_url}}/artifacts/{{artifact_id}}", "host": ["{{base_url}}"], "path": ["artifacts", "{{artifact_id}}"] } },
+          "response": [],
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+            "const data = pm.response.json();",
+            "pm.collectionVariables.set('artifact_name_current', data.name);",
+            "pm.collectionVariables.set('artifact_power_current', data.power_level);",
+            "pm.test('Artifact realm still matches stored realm', function () { pm.expect(data.origin_realm_id).to.eql(parseInt(pm.collectionVariables.get('realm_id'))); });",
+            "pm.test('Artifact still has heroes array', function () { pm.expect(data.heroes).to.be.an('array'); });"
+          ] } } ]
+        },
+        { "name": "Assign Artifact to Hero", "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{\n  \"artifact_id\": {{artifact_id}},\n  \"hero_id\": {{hero_id}}\n}" }, "url": { "raw": "{{base_url}}/artifact-hero", "host": ["{{base_url}}"], "path": ["artifact-hero"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+          "const data = pm.response.json();",
+          "pm.test('Artifact id matches variable', function () { pm.expect(data.artifact_id).to.eql(parseInt(pm.collectionVariables.get('artifact_id'))); });",
+          "pm.test('Hero id matches variable', function () { pm.expect(data.hero_id).to.eql(parseInt(pm.collectionVariables.get('hero_id'))); });"
+        ] } } ] },
+        { "name": "Detach Artifact from Hero", "request": { "method": "DELETE", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{\n  \"artifact_id\": {{artifact_id}},\n  \"hero_id\": {{hero_id}}\n}" }, "url": { "raw": "{{base_url}}/artifact-hero", "host": ["{{base_url}}"], "path": ["artifact-hero"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+          "const data = pm.response.json();",
+          "pm.test('Artifact id matches variable', function () { pm.expect(data.artifact_id).to.eql(parseInt(pm.collectionVariables.get('artifact_id'))); });",
+          "pm.test('Hero id matches variable', function () { pm.expect(data.hero_id).to.eql(parseInt(pm.collectionVariables.get('hero_id'))); });"
+        ] } } ] },
+        { "name": "List Artifact Heroes", "request": { "method": "GET", "header": [ { "key": "Accept", "value": "application/json" } ], "url": { "raw": "{{base_url}}/artifacts/{{artifact_id}}/heroes", "host": ["{{base_url}}"], "path": ["artifacts", "{{artifact_id}}", "heroes"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+          "const data = pm.response.json();",
+          "pm.test('Heroes returned as array', function () { pm.expect(data).to.be.an('array'); });"
+        ] } } ] },
+        { "name": "List Top Artifacts", "request": { "method": "GET", "header": [ { "key": "Accept", "value": "application/json" } ], "url": { "raw": "{{base_url}}/artifacts/top", "host": ["{{base_url}}"], "path": ["artifacts", "top"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+          "const data = pm.response.json();",
+          "pm.test('Top artifacts returned as array', function () { pm.expect(data).to.be.an('array'); });"
+        ] } } ] }
+      ]
+    },
+    {
+      "name": "Cleanup - Deletes",
+      "item": [
+        { "name": "Delete Region", "request": { "method": "DELETE", "header": [ { "key": "Accept", "value": "application/json" } ], "url": { "raw": "{{base_url}}/regions/{{region_id}}", "host": ["{{base_url}}"], "path": ["regions", "{{region_id}}"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [ "pm.test('Status code is 204', function () { pm.response.to.have.status(204); });" ] } } ] },
+        { "name": "Delete Realm", "request": { "method": "DELETE", "header": [ { "key": "Accept", "value": "application/json" } ], "url": { "raw": "{{base_url}}/realms/{{realm_id}}", "host": ["{{base_url}}"], "path": ["realms", "{{realm_id}}"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [ "pm.test('Status code is 204', function () { pm.response.to.have.status(204); });" ] } } ] },
+        { "name": "Delete Hero", "request": { "method": "DELETE", "header": [ { "key": "Accept", "value": "application/json" } ], "url": { "raw": "{{base_url}}/heroes/{{hero_id}}", "host": ["{{base_url}}"], "path": ["heroes", "{{hero_id}}"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [ "pm.test('Status code is 204', function () { pm.response.to.have.status(204); });" ] } } ] },
+        { "name": "Delete Creature", "request": { "method": "DELETE", "header": [ { "key": "Accept", "value": "application/json" } ], "url": { "raw": "{{base_url}}/creatures/{{creature_id}}", "host": ["{{base_url}}"], "path": ["creatures", "{{creature_id}}"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [ "pm.test('Status code is 204', function () { pm.response.to.have.status(204); });" ] } } ] },
+        { "name": "Delete Artifact", "request": { "method": "DELETE", "header": [ { "key": "Accept", "value": "application/json" } ], "url": { "raw": "{{base_url}}/artifacts/{{artifact_id}}", "host": ["{{base_url}}"], "path": ["artifacts", "{{artifact_id}}"] } }, "response": [], "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [ "pm.test('Status code is 204', function () { pm.response.to.have.status(204); });" ] } } ] }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost/api" },
+    { "key": "region_id", "value": "1" },
+    { "key": "realm_id", "value": "1" },
+    { "key": "hero_id", "value": "1" },
+    { "key": "creature_id", "value": "1" },
+    { "key": "artifact_id", "value": "1" }
+  ]
+}

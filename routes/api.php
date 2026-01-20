@@ -13,6 +13,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// Endpoints con prefijos reservados (deben ir antes de apiResource para evitar colisiones con {id})
+Route::get('heroes/alive', [HeroesController::class, 'getalive']);
+Route::get('creatures/dangerous', [CreatureController::class, 'getdangerous']);
+Route::get('artifacts/top', [ArtifactController::class, 'gettop']);
+
 Route::apiResource('regions', RegionsController::class);
 Route::apiResource('realms', RealmsController::class);
 Route::apiResource('heroes', HeroesController::class);
@@ -31,6 +36,3 @@ Route::get('heroes/{id}/artifacts', [HeroesController::class, 'artifacts']);
 // Endpoints opcionales 2
 Route::get("realms/{id}/heroes", [RealmsController::class, 'getheroes']);
 Route::get("regions/{id}/creatures", [RegionsController::class, 'getcreatures']);
-Route::get("heroes/alive", [HeroesController::class, 'getalive']);
-Route::get("creatures/dangerous", [CreatureController::class, 'getdangerous']);
-Route::get("artifacts/top", [ArtifactController::class, 'gettop']);

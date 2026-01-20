@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Region;
+use Illuminate\Support\Facades\DB;
 
 class RegionsController extends Controller
 {
@@ -47,7 +48,34 @@ class RegionsController extends Controller
      */
     public function destroy($id)
     {
-        Region::destroy($id);
+        DB::transaction(function () use ($id) {
+            $region = Region::with(['creatures', 'realms.heroes.artifacts', 'realms.artifacts.heroes'])->findOrFail($id);
+
+            // Delete creatures tied to the region
+            foreach ($region->creatures as $creature) {
+                $creature->delete();
+            }
+
+            // Cascade delete realms and their dependents
+            foreach ($region->realms as $realm) {
+                // Detach and remove artifacts in the realm
+                foreach ($realm->artifacts as $artifact) {
+                    $artifact->heroes()->detach();
+                    $artifact->delete();
+                }
+
+                // Detach hero-artifact pivots and delete heroes in the realm
+                foreach ($realm->heroes as $hero) {
+                    $hero->artifacts()->detach();
+                    $hero->delete();
+                }
+
+                $realm->delete();
+            }
+
+            $region->delete();
+        });
+
         return response()->json(null, 204);
     }
 
