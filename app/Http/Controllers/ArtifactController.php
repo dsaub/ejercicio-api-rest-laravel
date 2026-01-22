@@ -12,7 +12,7 @@ class ArtifactController extends Controller
      */
     public function index()
     {
-        return response()->json(Artifact::with('heroes')->get(), 200);
+        return response()->json(Artifact::with("heroes")->get(), 200);
     }
 
     /**
@@ -23,12 +23,12 @@ class ArtifactController extends Controller
         $artifact = Artifact::create($request->all());
 
         // Optionally attach heroes on creation
-        $heroIds = $request->input('hero_ids', $request->input('hero_id'));
+        $heroIds = $request->input("hero_ids", $request->input("hero_id"));
         if ($heroIds) {
             $artifact->heroes()->sync((array) $heroIds);
         }
 
-        return response()->json($artifact->load('heroes'), 201);
+        return response()->json($artifact->load("heroes"), 201);
     }
 
     /**
@@ -36,7 +36,7 @@ class ArtifactController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(Artifact::with('heroes')->findOrFail($id), 200);
+        return response()->json(Artifact::with("heroes")->findOrFail($id), 200);
     }
 
     /**
@@ -48,12 +48,12 @@ class ArtifactController extends Controller
         $artifact->update($request->all());
 
         // Optionally update hero assignments
-        $heroIds = $request->input('hero_ids', $request->input('hero_id'));
+        $heroIds = $request->input("hero_ids", $request->input("hero_id"));
         if ($heroIds !== null) {
             $artifact->heroes()->sync((array) $heroIds);
         }
 
-        return response()->json($artifact->load('heroes'), 200);
+        return response()->json($artifact->load("heroes"), 200);
     }
 
     /**
@@ -74,8 +74,9 @@ class ArtifactController extends Controller
         return response()->json($artifact->heroes, 200);
     }
 
-    public function gettop() {
-        $artifacts = Artifact::with('heroes')->get();
+    public function gettop()
+    {
+        $artifacts = Artifact::with("heroes")->get();
         $newArray = [];
         foreach ($artifacts as $artifact) {
             if ($artifact->power_level > 90) {
